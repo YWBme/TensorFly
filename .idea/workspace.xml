@@ -5,9 +5,28 @@
       <change afterPath="$PROJECT_DIR$/../HandsonML/ch08.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../HandsonML/ch09.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../HandsonML/learning_sklearn.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/tensorflow.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vagrant.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.train-images.idx3-ubyte.swp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MNIST_data/t10k-images-idx3-ubyte.gz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MNIST_data/t10k-labels-idx1-ubyte.gz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MNIST_data/train-images-idx3-ubyte.gz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MNIST_data/train-labels-idx1-ubyte.gz" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/input_data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/old/t10k-images.idx3-ubyte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/old/t10k-labels.idx1-ubyte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/old/tensorflow.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/old/tensorflow_manual_cn.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/old/train-images.idx3-ubyte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/old/train-labels.idx1-ubyte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tensorflow" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../BigData/aclImdb/train/pos/5924_8.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../BigData/aclImdb/train/pos/5924_8.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../HandsonML/.idea/HandsonML.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../HandsonML/.idea/HandsonML.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../HandsonML/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../HandsonML/.idea/misc.xml" afterDir="false" />
@@ -6066,13 +6085,7 @@
       <change beforePath="$PROJECT_DIR$/../Spider/text.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Spider/text.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Spider/wordcloud.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Spider/wordcloud.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Spider/产品经理.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../Spider/产品经理.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/t10k-images.idx3-ubyte" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/t10k-labels.idx1-ubyte" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tensorflow.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tensorflow_manual_cn.pdf" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/tensorfly.py" beforeDir="false" afterPath="$PROJECT_DIR$/tensorfly.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/train-images.idx3-ubyte" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/train-labels.idx1-ubyte" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../yongan/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../yongan/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -6397,7 +6410,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1180" y="25" width="1380" height="1012" extended-state="4" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.2278481" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
