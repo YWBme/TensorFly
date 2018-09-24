@@ -374,6 +374,14 @@ plt.show()
 
 
 
+
+
+
+
+
+
+
+
 # ----------------------------------------------------------------------------------------------------------------------
 # Predict house prices: regression  |  TensorFlow
 # ----------------------------------------------------------------------------------------------------------------------
@@ -527,82 +535,342 @@ _ = plt.ylabel("Count")
 
 
 
+# ----------------------------------------------------------------------------------------------------------------------
+# Predict house prices: regression  |  TensorFlow
+# ----------------------------------------------------------------------------------------------------------------------
+# https://www.tensorflow.org/tutorials/keras/basic_regression
+
+# Download the IMDB dataset
+import tensorflow as tf
+from tensorflow import keras
+import numpy as np
+import matplotlib.pyplot as plt
+print(tf.__version__)
+get_ipython().run_line_magic('matplotlib', 'qt5')
+
+
+NUM_WORDS = 10000
+(train_data, train_labels), (test_data, test_labels) = keras.datasets.imdb.load_data(num_words=NUM_WORDS)
+def multi_hot_sequences(sequences, dimension):
+    # Create an all-zero matrix of shape (len(sequences), dimension)
+    results = np.zeros((len(sequences), dimension))
+    for i, word_indices in enumerate(sequences):
+        results[i, word_indices] = 1.0  # set specific indices of results[i] to 1s
+    return results
+train_data = multi_hot_sequences(train_data, dimension=NUM_WORDS)
+test_data = multi_hot_sequences(test_data, dimension=NUM_WORDS)
+
+plt.plot(train_data[24000])
+
+
+
+# Create a baseline model
+
+baseline_model = keras.Sequential([
+    # `input_shape` is only required here so that `.summary` works.
+    keras.layers.Dense(16, activation=tf.nn.relu, input_shape=(NUM_WORDS,)),
+    keras.layers.Dense(16, activation=tf.nn.relu),
+    keras.layers.Dense(1, activation=tf.nn.sigmoid)
+])
+baseline_model.compile(optimizer='adam',
+                       loss='binary_crossentropy',
+                       metrics=['accuracy', 'binary_crossentropy'])
+baseline_model.summary()
+
+
+baseline_history = baseline_model.fit(train_data,
+                                      train_labels,
+                                      epochs=20,
+                                      batch_size=512,
+                                      validation_data=(test_data, test_labels),
+                                      verbose=2)
+
+# Create a smaller model
+smaller_model = keras.Sequential([
+    keras.layers.Dense(4, activation=tf.nn.relu, input_shape=(NUM_WORDS,)),
+    keras.layers.Dense(4, activation=tf.nn.relu),
+    keras.layers.Dense(1, activation=tf.nn.sigmoid)
+])
+smaller_model.compile(optimizer='adam',
+                loss='binary_crossentropy',
+                metrics=['accuracy', 'binary_crossentropy'])
+smaller_model.summary()
+
+
+
+smaller_history = smaller_model.fit(train_data,
+                                    train_labels,
+                                    epochs=20,
+                                    batch_size=512,
+                                    validation_data=(test_data, test_labels),
+                                    verbose=2)
+
+
+# Create a bigger model
+bigger_model = keras.models.Sequential([
+    keras.layers.Dense(512, activation=tf.nn.relu, input_shape=(NUM_WORDS,)),
+    keras.layers.Dense(512, activation=tf.nn.relu),
+    keras.layers.Dense(1, activation=tf.nn.sigmoid)
+])
+bigger_model.compile(optimizer='adam',
+                     loss='binary_crossentropy',
+                     metrics=['accuracy','binary_crossentropy'])
+bigger_model.summary()
+
+bigger_history = bigger_model.fit(train_data, train_labels,
+                                  epochs=20,
+                                  batch_size=512,
+                                  validation_data=(test_data, test_labels),
+                                  verbose=2)
+
+# Plot the training and validation loss
+
+def plot_history(histories, key='binary_crossentropy'):
+    plt.figure(figsize=(16, 10))
+
+    for name, history in histories:
+        val = plt.plot(history.epoch, history.history['val_' + key],
+                       '--', label=name.title() + ' Val')
+        plt.plot(history.epoch, history.history[key], color=val[0].get_color(),
+                 label=name.title() + ' Train')
+    plt.xlabel('Epochs')
+    plt.ylabel(key.replace('_', ' ').title())
+    plt.legend()
+    plt.xlim([0, max(history.epoch)])
+
+
+plot_history([('baseline', baseline_history),
+              ('smaller', smaller_history),
+              ('bigger', bigger_history)])
 
 
 
 
+# Strategies
+# Add L2 weight regularization
+l2_model = keras.models.Sequential([
+    keras.layers.Dense(16, kernel_regularizer=keras.regularizers.l2(0.001),
+                       activation=tf.nn.relu, input_shape=(NUM_WORDS,)),
+    keras.layers.Dense(16, kernel_regularizer=keras.regularizers.l2(0.001),
+                       activation=tf.nn.relu),
+    keras.layers.Dense(1, activation=tf.nn.sigmoid)
+])
+l2_model.summary()
 
+l2_model.compile(optimizer='adam',
+                 loss='binary_crossentropy',
+                 metrics=['accuracy', 'binary_crossentropy'])
+l2_model_history = l2_model.fit(train_data, train_labels,
+                                epochs=20,
+                                batch_size=512,
+                                validation_data=(test_data, test_labels),
+                                verbose=2)
 
 
+plot_history([('baseline', baseline_history),
+              ('l2', l2_model_history)])
 
 
+# Add L1 weight regularization
 
+l1_model = keras.models.Sequential([
+    keras.layers.Dense(16, kernel_regularizer=keras.regularizers.l1(0.001),
+                       activation=tf.nn.relu, input_shape=(NUM_WORDS,)),
+    keras.layers.Dense(16, kernel_regularizer=keras.regularizers.l1(0.001),
+                       activation=tf.nn.relu),
+    keras.layers.Dense(1, activation=tf.nn.sigmoid)
+])
+l1_model.summary()
+l1_model.compile(optimizer='adam',
+                 loss='binary_crossentropy',
+                 metrics=['accuracy', 'binary_crossentropy'])
+l1_model_history = l1_model.fit(train_data, train_labels,
+                                epochs=20,
+                                batch_size=512,
+                                validation_data=(test_data, test_labels),
+                                verbose=2)
+plot_history([('baseline', baseline_history),
+              ('l1', l1_model_history),
+              ('l2', l2_model_history)])
 
 
 
 
 
+# Add dropout
 
+dpt_model = keras.models.Sequential([
+    keras.layers.Dense(16, activation=tf.nn.relu, input_shape=(NUM_WORDS,)),
+    keras.layers.Dropout(0.5),
+    keras.layers.Dense(16, activation=tf.nn.relu),
+    keras.layers.Dropout(0.5),
+    keras.layers.Dense(1, activation=tf.nn.sigmoid)
+])
+dpt_model.compile(optimizer='adam',
+                  loss='binary_crossentropy',
+                  metrics=['accuracy','binary_crossentropy'])
+dpt_model.summary()
 
+dpt_model_history = dpt_model.fit(train_data, train_labels,
+                                  epochs=20,
+                                  batch_size=512,
+                                  validation_data=(test_data, test_labels),
+                                  verbose=2)
 
+plot_history([('baseline', baseline_history),
+              ('dropout', dpt_model_history),
+              ('l2', l2_model_history)])
 
 
+plot_history([('baseline', baseline_history),
+              ('dropout', dpt_model_history),
+              ('l2', l2_model_history),
+              ('l1', l1_model_history),
+              ('smmller', smaller_history),
+              ('bigger', bigger_history)])
 
 
 
+#
+# To recap: here the most common ways to prevent overfitting in neural networks:
+#
+# Get more training data.
+# Reduce the capacity of the network.
+# Add weight regularization.
+# Add dropout.
+# And two important approaches not covered in this guide are data-augmentation and batch normalization.
 
 
 
 
 
+# ----------------------------------------------------------------------------------------------------------------------
+# Predict house prices: regression  |  TensorFlow
+# ----------------------------------------------------------------------------------------------------------------------
+# https://www.tensorflow.org/tutorials/keras/basic_regression
 
+# Setup
+# !pip install -q h5py pyyaml
 
+# Get an example dataset
 
+from __future__ import absolute_import, division, print_function
+import os
+import tensorflow as tf
+from tensorflow import keras
+tf.__version__
 
 
 
+(train_images, train_labels), (test_images, test_labels) = tf.keras.datasets.mnist.load_data()
+train_labels = train_labels[:1000]
+test_labels = test_labels[:1000]
+train_images = train_images[:1000].reshape(-1, 28 * 28) / 255.0
+test_images = test_images[:1000].reshape(-1, 28 * 28) / 255.0
 
 
 
+# Define a model
 
+# Returns a short sequential model
+def create_model():
+    model = tf.keras.models.Sequential([
+        keras.layers.Dense(512, activation=tf.nn.relu, input_shape=(784,)),
+        keras.layers.Dropout(0.2),
+        keras.layers.Dense(10, activation=tf.nn.softmax)
+    ])
 
+    model.compile(optimizer=tf.keras.optimizers.Adam(),
+                  loss=tf.keras.losses.sparse_categorical_crossentropy,
+                  metrics=['accuracy'])
 
+    return model
 
 
+# Create a basic model instance
+model = create_model()
+model.summary()
 
 
 
+checkpoint_path = "training_1/cp.ckpt"
+checkpoint_dir = os.path.dirname(checkpoint_path)
+# Create checkpoint callback
+cp_callback = tf.keras.callbacks.ModelCheckpoint(checkpoint_path,
+                                                 save_weights_only=True,
+                                                 verbose=1)
+model = create_model()
+model.fit(train_images, train_labels,  epochs = 10,
+          validation_data = (test_images,test_labels),
+          callbacks = [cp_callback])  # pass callback to training
 
 
+model = create_model()
+loss, acc = model.evaluate(test_images, test_labels)
+print("Untrained model, accuracy: {:5.2f}%".format(100*acc))
 
 
+model.load_weights(checkpoint_path)
+loss,acc = model.evaluate(test_images, test_labels)
+print("Restored model, accuracy: {:5.2f}%".format(100*acc))
 
 
+# include the epoch in the file name. (uses `str.format`)
+checkpoint_path = "training_2/cp-{epoch:04d}.ckpt"
+checkpoint_dir = os.path.dirname(checkpoint_path)
+cp_callback = tf.keras.callbacks.ModelCheckpoint(
+    checkpoint_path, verbose=1, save_weights_only=True,
+    # Save weights, every 5-epochs.
+    period=5)
+model = create_model()
+model.fit(train_images, train_labels,
+          epochs = 50, callbacks = [cp_callback],
+          validation_data = (test_images,test_labels),
+          verbose=0)
 
 
+import pathlib
+# Sort the checkpoints by modification time.
+checkpoints = pathlib.Path(checkpoint_dir).glob("*.index")
+checkpoints = sorted(checkpoints, key=lambda cp:cp.stat().st_mtime)
+checkpoints = [cp.with_suffix('') for cp in checkpoints]
+latest = str(checkpoints[-1])
+checkpoints
 
 
 
+model = create_model()
+model.load_weights(latest)
+loss, acc = model.evaluate(test_images, test_labels)
+print("Restored model, accuracy: {:5.2f}%".format(100*acc))
 
 
 
+# Manually save weights
 
+# Save the weights
+model.save_weights('./checkpoints/my_checkpoint')
+# Restore the weights
+model = create_model()
+model.load_weights('./checkpoints/my_checkpoint')
+loss,acc = model.evaluate(test_images, test_labels)
+print("Restored model, accuracy: {:5.2f}%".format(100*acc))
 
 
 
+# Save the entire model
 
+model = create_model()
+model.fit(train_images, train_labels, epochs=5)
+# Save entire model to a HDF5 file
+model.save('my_model.h5')
 
 
+new_model = keras.models.load_model('my_model.h5')
+new_model.summary()
 
-
-
-
-
-
-
-
-
-
+loss, acc = new_model.evaluate(test_images, test_labels)
+print("Restored model, accuracy: {:5.2f}%".format(100*acc))
 
 
 
