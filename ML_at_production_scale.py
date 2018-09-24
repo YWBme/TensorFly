@@ -16,8 +16,8 @@ from IPython.display import clear_output
 tf.enable_eager_execution()
 
 
-! pip install -q requests
-! git clone --depth 1 https://github.com/tensorflow/models
+# ! pip install -q requests
+# ! git clone --depth 1 https://github.com/tensorflow/models
 
 
 models_path = os.path.join(os.getcwd(), 'models')
@@ -27,8 +27,17 @@ from official.wide_deep import census_dataset
 from official.wide_deep import census_main
 census_dataset.download("/tmp/census_data/")
 
+#export PYTHONPATH=${PYTHONPATH}:"$(pwd)/models"
+#running from python you need to set the `os.environ` or the subprocess will not see the directory.
+if "PYTHONPATH" in os.environ:
+    os.environ['PYTHONPATH'] += os.pathsep +  models_path
+else:
+    os.environ['PYTHONPATH'] = models_path
 
 
+!python -m official.wide_deep.census_main --help
+
+!python -m official.wide_deep.census_main --model_type=wide --train_epochs=2
 
 
 
