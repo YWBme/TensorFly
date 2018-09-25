@@ -13,7 +13,7 @@ import sys
 import matplotlib.pyplot as plt
 from IPython.display import clear_output
 
-tf.enable_eager_execution()
+tfe = tf.enable_eager_execution()
 
 
 # ! pip install -q requests
@@ -41,6 +41,7 @@ else:
 
 
 
+# 增加一行
 
 
 
